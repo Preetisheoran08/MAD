@@ -1,57 +1,57 @@
 package com.example.question5;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.core.content.FileProvider;
 
 import java.io.File;
 import java.util.ArrayList;
 
-public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHolder> {
+public class ImageAdapter extends BaseAdapter {
 
-    ArrayList<File> images;
-    Context context;
+    private Context context;
+    private ArrayList<File> imageFiles;
 
-    public ImageAdapter(ArrayList<File> images, Context context) {
-        this.images = images;
+    public ImageAdapter(Context context, ArrayList<File> imageFiles) {
         this.context = context;
-    }
-
-    @NonNull
-    @Override
-    public ImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context).inflate(R.layout.image_item, parent, false);
-        return new ImageViewHolder(v);
+        this.imageFiles = imageFiles;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
-        File imgFile = images.get(position);
-        holder.imageView.setImageURI(Uri.fromFile(imgFile));
-        holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, ImageDetailsActivity.class);
-            intent.putExtra("imagePath", imgFile.getAbsolutePath());
-            context.startActivity(intent);
-        });
+    public int getCount() {
+        return imageFiles.size();
     }
 
     @Override
-    public int getItemCount() {
-        return images.size();
+    public Object getItem(int position) {
+        return imageFiles.get(position);
     }
 
-    public static class ImageViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
         ImageView imageView;
-        public ImageViewHolder(@NonNull View itemView) {
-            super(itemView);
-            imageView = itemView.findViewById(R.id.imageViewItem);
+        if (convertView == null) {
+            imageView = new ImageView(context);
+            imageView.setLayoutParams(new ViewGroup.LayoutParams(300, 300));
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        } else {
+            imageView = (ImageView) convertView;
         }
+
+        File imageFile = imageFiles.get(position);
+        Uri imageUri = FileProvider.getUriForFile(context, "com.example.question5.fileprovider", imageFile);
+        imageView.setImageURI(imageUri);
+
+        return imageView;
     }
 }

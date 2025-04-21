@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:padding="16dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:padding="16dp"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -13,21 +13,35 @@
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:layout_marginBottom="16dp" />
 
-        <TextView
-            android:id="@+id/textDetails"
-            android:layout_marginTop="16dp"
-            android:textSize="16sp"
-            android:textColor="#000"
+        <TextView android:id="@+id/nameText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <TextView android:id="@+id/pathText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"/>
+
+        <TextView android:id="@+id/sizeText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"/>
+
+        <TextView android:id="@+id/dateText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"/>
 
         <Button
-            android:id="@+id/btnDelete"
-            android:layout_marginTop="20dp"
-            android:text="Delete"
+            android:id="@+id/deleteBtn"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="Delete Image"
+            android:layout_marginTop="20dp" />
     </LinearLayout>
 </ScrollView>

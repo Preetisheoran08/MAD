@@ -2,13 +2,14 @@ package com.example.question5;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -16,9 +17,10 @@ import java.util.Date;
 
 public class ImageDetailsActivity extends AppCompatActivity {
 
-    ImageView imageView;
-    TextView detailsView;
-    File imageFile;
+    private ImageView imageView;
+    private TextView nameText, pathText, sizeText, dateText;
+    private Button deleteBtn;
+    private File imageFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,40 +28,37 @@ public class ImageDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_image_details);
 
         imageView = findViewById(R.id.imageView);
-        detailsView = findViewById(R.id.textDetails);
+        nameText = findViewById(R.id.nameText);
+        pathText = findViewById(R.id.pathText);
+        sizeText = findViewById(R.id.sizeText);
+        dateText = findViewById(R.id.dateText);
+        deleteBtn = findViewById(R.id.deleteBtn);
 
-        String path = getIntent().getStringExtra("imagePath");
-        imageFile = new File(path);
+        String imagePath = getIntent().getStringExtra("imagePath");
+        imageFile = new File(imagePath);
 
-        imageView.setImageURI(android.net.Uri.fromFile(imageFile));
-        detailsView.setText(getImageDetails(imageFile));
+        if (imageFile.exists()) {
+            imageView.setImageURI(FileProvider.getUriForFile(this, "com.example.question5.fileprovider", imageFile));
+            nameText.setText("Name: " + imageFile.getName());
+            pathText.setText("Path: " + imageFile.getAbsolutePath());
+            sizeText.setText("Size: " + imageFile.length() / 1024 + " KB");
+            dateText.setText("Date: " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(imageFile.lastModified())));
+        }
 
-        findViewById(R.id.btnDelete).setOnClickListener(v -> confirmDelete());
-    }
-
-    private String getImageDetails(File file) {
-        String name = file.getName();
-        long size = file.length() / 1024;
-        long modified = file.lastModified();
-        String date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date(modified));
-        return "Name: " + name + "\nSize: " + size + " KB\nPath: " + file.getAbsolutePath() + "\nDate: " + date;
-    }
-
-    private void confirmDelete() {
-        new AlertDialog.Builder(this)
-                .setTitle("Delete Image")
-                .setMessage("Are you sure?")
-                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
+        deleteBtn.setOnClickListener(v -> {
+            new AlertDialog.Builder(this)
+                    .setTitle("Delete Image")
+                    .setMessage("Are you sure you want to delete this image?")
+                    .setPositiveButton("Yes", (dialog, which) -> {
                         if (imageFile.delete()) {
-                            Toast.makeText(ImageDetailsActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Image deleted", Toast.LENGTH_SHORT).show();
                             finish();
                         } else {
-                            Toast.makeText(ImageDetailsActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Failed to delete image", Toast.LENGTH_SHORT).show();
                         }
-                    }
-                })
-                .setNegativeButton("Cancel", null)
-                .show();
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
+        });
     }
 }
