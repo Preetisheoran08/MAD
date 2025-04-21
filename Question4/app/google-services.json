@@ -12,7 +12,12 @@
           "package_name": "com.example.question4"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "500427072927-paqh215crn1lvs2r19nvkoojjprvvag4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyC7_MZ-MsqljZB9fMny5c0xKbyWeKjX3qA"
@@ -20,7 +25,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "500427072927-paqh215crn1lvs2r19nvkoojjprvvag4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
